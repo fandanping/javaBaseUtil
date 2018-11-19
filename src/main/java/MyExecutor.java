@@ -13,9 +13,9 @@ public class MyExecutor  extends Thread{
      public void run(){
          try {
              System.out.println("["+this.index+"] start..." );
-             Thread.sleep((int)(Math.random()*10000));
+            // Thread.sleep((int)(Math.random()*10000));
              System.out.println("["+this.index+"] end..." );
-         } catch (InterruptedException e) {
+         } catch (Exception e) {
              e.printStackTrace();
          }
      }
