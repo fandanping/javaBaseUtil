@@ -1,3 +1,5 @@
+package thread;
+
 /**
  * 单例模式懒汉式实现--解决线程安全问题实现
  */
@@ -7,9 +9,9 @@ public class Singleton {
 
     private static Singleton instance = null;
 
-/*    public static Singleton getInstance() {
+/*    public static thread.Singleton getInstance() {
         if (instance == null) {
-            instance = new Singleton();
+            instance = new thread.Singleton();
         }
         return instance;
     }*/
