@@ -25,6 +25,7 @@ public class MyExecutor  extends Thread{
          ExecutorService service= Executors.newFixedThreadPool(4);
          for(int i=0;i<10;i++){
              service.execute(new MyExecutor(i));
+
          }
          System.out.println("submit finish");
          service.shutdown();
