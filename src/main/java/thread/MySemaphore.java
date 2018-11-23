@@ -1,58 +1,42 @@
 package thread;
 
+import javafx.concurrent.Worker;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 /**
- * 　　Semaphore也是一个线程同步的辅助类，可以维护当前访问自身的线程个数，并提供了同步机制。使用Semaphore可以控制同时访问资源的线程个数，例如，实现一个文件允许的并发访问数。
-
- Semaphore的主要方法摘要：
-
- 　　void acquire():从此信号量获取一个许可，在提供一个许可前一直将线程阻塞，否则线程被中断。
-
- 　　void release():释放一个许可，将其返回给信号量。
-
- 　　int availablePermits():返回此信号量中当前可用的许可数。
-
- 　　boolean hasQueuedThreads():查询是否有线程正在等待获取。
-
-
+ * 　Semaphore翻译成字面意思为 信号量，Semaphore可以控同时访问的线程个数，通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。
+ *　假若一个工厂有5台机器，但是有8个工人，一台机器同时只能被一个工人使用，只有使用完了，其他工人才能继续使用。那么我们就可以通过Semaphore来实现：
+ *
  */
-public class MySemaphore extends Thread {
-    Semaphore position;
-    private int id;
-    public MySemaphore(int i,Semaphore s){
-        this.id=i;
-        this.position=s;
-    }
-    public void run(){
-        try{
-            if(position.availablePermits()>0){
-                System.out.println("顾客["+this.id+"]进入厕所，有空位");
-            }
-            else{
-                System.out.println("顾客["+this.id+"]进入厕所，没空位，排队");
-            }
-            position.acquire();
-            System.out.println("顾客["+this.id+"]获得坑位");
-            Thread.sleep((int)(Math.random()*1000));
-            System.out.println("顾客["+this.id+"]使用完毕");
-            position.release();
-        }
-        catch(Exception e){
-            e.printStackTrace();
+public class MySemaphore  {
+    public static void main(String [] args){
+        int N=8; //工人数
+        Semaphore semaphore=new Semaphore(5);//机器数
+        for(int i=0;i<N;i++){
+            new Worker(i,semaphore).start();
         }
     }
-    public static void main(String args[]){
-        ExecutorService list=Executors.newCachedThreadPool();
-        Semaphore position=new Semaphore(2);
-        for(int i=0;i<10;i++){
-            list.submit(new MySemaphore(i+1,position));
+    static class Worker extends  Thread{
+        private int num;
+        private Semaphore semaphore;
+        public Worker(int num,Semaphore semaphore){
+            this.num=num;
+            this.semaphore=semaphore;
         }
-        list.shutdown();
-        position.acquireUninterruptibly(2);
-        System.out.println("使用完毕，需要清扫了");
-        position.release(2);
+        @Override
+        public void run (){
+            try {
+                semaphore.acquire();
+                System.out.println("工人"+this.num+"占用一个机器生产");
+                Thread.sleep(2000);
+                System.out.println("工人"+this.num+"释放出机器");
+                semaphore.release();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
