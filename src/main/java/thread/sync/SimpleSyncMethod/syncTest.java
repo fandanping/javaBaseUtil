@@ -1,8 +1,8 @@
-package thread.syncTest;
+package thread.sync.SimpleSyncMethod;
 
 public class syncTest {
     int value=0;
-    public   void add(){
+    public  synchronized  void add(){
         System.out.println("begining");
         try{
             this.value++;
@@ -12,8 +12,5 @@ public class syncTest {
             e.printStackTrace();
         }
         System.out.println("ending");
-    }
-    public synchronized  static void  generalMethod(){
-        System.out.println("111");
     }
 }

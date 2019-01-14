@@ -128,9 +128,9 @@ public class JDBCUtil {
             //调用sql
             pst=conn.prepareStatement(sql);
             //参数赋值
-            for(int i=0;i<params.length;i++){
+           /* for(int i=0;i<params.length;i++){
                 pst.setObject(i+1,params[i]);
-            }
+            }*/
             //执行
             rst = pst.executeQuery();
         } catch (SQLException e) {
@@ -198,7 +198,7 @@ public class JDBCUtil {
         try {
             while(rs.next()){
                 Map<String, Object> map = new HashMap<String, Object>();
-                for(int i=1;i<columnCount;i++){
+                for(int i=1;i<=columnCount;i++){
                     map.put(rsmd.getColumnLabel(i),rs.getObject(i));
                 }
                 list.add(map);
